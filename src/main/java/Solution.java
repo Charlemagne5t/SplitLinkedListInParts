@@ -1,50 +1,41 @@
 import java.util.Arrays;
 
-public class Solution {
+class Solution {
     public ListNode[] splitListToParts(ListNode head, int k) {
-        ListNode[] result = new ListNode[k];
-        ListNode dummy = head;
-        int count = 0;
-        while (dummy != null) {
-            count++;
-            dummy = dummy.next;
-        }
-        int base = count / k;
-        int addOneToNNodes = 0;
-        if (count % k != 0) {
-            addOneToNNodes = count % k;
-        }
+        int c = 0;
         ListNode temp = head;
-        for (int i = 0; i < k; i++) {
-            if(temp == null) break;
-            if (addOneToNNodes != 0) {
-                ListNode subHead = temp;
-                head = temp;
-                ListNode prev = null;
-                for (int j = 0; j < base + 1; j++) {
-                    prev = head;
-                    head = head.next;
-                }
-                temp = head;
-                prev.next = null;
 
-                result[i] = subHead;
-                addOneToNNodes--;
-            } else {
-                ListNode subHead = temp;
-                head = temp;
-                ListNode prev = null;
-                for (int j = 0; j < base; j++) {
-                    prev = head;
-                    head = head.next;
-                }
-                temp = head;
-                prev.next = null;
+        while(temp != null) {
+            c++;
+            temp = temp.next;
+        }
+        int base = c / k;
+        int add = c % k;
+        int[] count = new int[k];
+        Arrays.fill(count, base);
 
-                result[i] = subHead;
+        for(int i = 0; i < add; i++) {
+            count[i]++;
+        }
+        temp = head;
+        ListNode[] res = new ListNode[k];
+        for(int i = 0; i < k; i++) {
+            head = temp;
+            res[i] = head;
+            count[i]--;
+            if(head == null) {
+                break;
             }
+            while(count[i] > 0) {
+                count[i]--;
+                head = head.next;
+            }
+            temp = head.next;
+            head.next = null;
 
         }
-        return result;
+
+        return res;
+
     }
 }
